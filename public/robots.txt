@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zishankhan.vercel.app/sitemap.xml
