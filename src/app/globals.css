@@ -76,6 +76,57 @@ body {
   animation: shimmer 1.8s infinite;
 }
 
+/* AI Generative Image Loading Animation (Gemini / Midjourney style) */
+@keyframes ai-scan {
+  0% {
+    transform: translateY(-120%) rotate(-10deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(220%) rotate(-10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes ai-aurora {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes ai-pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+.animate-ai-scan {
+  animation: ai-scan 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-ai-aurora {
+  background-size: 200% 200%;
+  animation: ai-aurora 4s ease infinite;
+}
+
+.animate-ai-glow {
+  animation: ai-pulse-glow 2.5s ease-in-out infinite;
+}
+
 /* Focus visible styles for accessibility */
 :focus-visible {
   outline: 2px solid #60a5fa;
