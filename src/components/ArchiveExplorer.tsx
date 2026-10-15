@@ -17,6 +17,8 @@ export interface ArchiveCollection {
   driveUrl: string;
   categoryPageUrl: string;
   isSquare?: boolean;
+  isPortrait?: boolean;
+  unoptimized?: boolean;
   images: ArchiveItem[];
 }
 
@@ -229,6 +231,26 @@ export function ArchiveExplorer({ collections, totalCount }: ArchiveExplorerProp
                   />
                 ))}
               </div>
+            ) : col.isPortrait ? (
+              <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
+                {col.images.map((item, idx) => {
+                  const isBanner = item.src.toLowerCase().includes("banner");
+                  return (
+                    <GalleryImageCard
+                      key={idx}
+                      src={item.src}
+                      alt={item.alt}
+                      driveUrl={col.driveUrl}
+                      aspectRatio={isBanner ? "auto" : "portrait"}
+                      unoptimized={true}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      quality={80}
+                      width={isBanner ? 1200 : 1080}
+                      height={isBanner ? 600 : 2340}
+                    />
+                  );
+                })}
+              </div>
             ) : (
               <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
                 {col.images.map((item, idx) => (
@@ -238,6 +260,7 @@ export function ArchiveExplorer({ collections, totalCount }: ArchiveExplorerProp
                     alt={item.alt}
                     driveUrl={col.driveUrl}
                     aspectRatio="auto"
+                    unoptimized={col.unoptimized}
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     quality={75}
                     width={800}

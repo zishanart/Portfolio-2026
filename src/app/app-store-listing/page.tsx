@@ -53,21 +53,23 @@ export default function AppStoreListingPage() {
 
         <section
           aria-label="App store listing gallery"
-          className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
+          className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6"
         >
           {images.map((img, idx) => {
             const altText = getImageAlt(img, "App store screenshot mockup");
+            const isBanner = img.toLowerCase().includes("banner");
             return (
               <GalleryImageCard
                 key={idx}
                 src={`/App Store listing/${img}`}
                 alt={altText}
                 driveUrl={DRIVE_LINKS.appStore}
-                aspectRatio="auto"
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                quality={75}
-                width={800}
-                height={600}
+                aspectRatio={isBanner ? "auto" : "portrait"}
+                unoptimized={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                quality={80}
+                width={isBanner ? 1200 : 1080}
+                height={isBanner ? 600 : 2340}
               />
             );
           })}

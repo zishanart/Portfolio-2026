@@ -96,6 +96,7 @@ export default function ArchivePage() {
       driveUrl: DRIVE_LINKS.appStore,
       categoryPageUrl: "/app-store-listing",
       isSquare: false,
+      isPortrait: true,
       images: appStoreImages,
     },
   ];
