@@ -25,12 +25,15 @@ The website blends cinematic visual storytelling with technical precision: a 75-
 - Shared scroll progress boundary (`HeroSection`) coordinating both the canvas frame sequence and floating typography overlays.
 - Seamless, proportional scroll transitions between the hero storytelling container and the portfolio showcase grid.
 
-### 3. Curated Work Galleries
+### 3. Curated Work Galleries (6 Core Disciplines)
 - **Social Media Creatives**: High-impact brand storytelling, carousel slides, and viral campaigns (`/social-media`).
 - **Thumbnails**: High-converting, click-optimized YouTube and media thumbnails (`/thumbnails`).
 - **Brand Identities & Logos**: Distinctive vector-grade logos and brand marks (`/logos`).
 - **Typography & Lettering**: Expressive custom lettering, font pairings, and editorial layouts (`/typography`).
-- **Complete Archive**: Comprehensive showcase of past works, posters, and design experiments (`/archive`).
+- **Amazon A+ Images**: Conversion-focused E-commerce visuals, feature highlights, and brand storytelling (`/amazon-a-plus`).
+- **App Store Listing**: High-impact iOS/Android screenshot designs, device mockups, and store visual assets (`/app-store-listing`).
+- **Master Archive Explorer**: Interactive multi-tab explorer categorizing all 6 disciplines with project counters and direct Drive access (`/archive`).
+- **Google Drive Cloud Access**: Every project card and gallery header links directly to high-resolution Google Drive source repositories.
 
 ### 4. Next-Gen Image Optimization
 - All galleries migrated to `next/image` with modern formats (`AVIF`, `WebP`).

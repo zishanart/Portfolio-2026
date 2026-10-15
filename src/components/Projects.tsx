@@ -41,6 +41,20 @@ const PROJECTS: ProjectItem[] = [
     year: "",
     href: "/typography",
   },
+  {
+    title: "Amazon A+ Images",
+    description: "Conversion-focused E-commerce visuals, product feature highlights, and immersive brand storytelling modules.",
+    role: "",
+    year: "",
+    href: "/amazon-a-plus",
+  },
+  {
+    title: "App Store Listing",
+    description: "Eye-catching iOS and Android app screenshots, store mockups, and high-impact visual conversion assets.",
+    role: "",
+    year: "",
+    href: "/app-store-listing",
+  },
 ];
 
 export function Projects() {

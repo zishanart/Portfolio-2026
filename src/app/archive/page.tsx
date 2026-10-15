@@ -1,104 +1,147 @@
-import React from 'react';
-import fs from 'fs';
-import path from 'path';
-import Link from 'next/link';
-import Image from 'next/image';
-import type { Metadata } from 'next';
-import { ArrowLeft } from 'lucide-react';
+import React from "react";
+import fs from "fs";
+import path from "path";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { ArrowLeft, ExternalLink, Sparkles } from "lucide-react";
+import { ArchiveExplorer, ArchiveCollection, ArchiveItem } from "@/components/ArchiveExplorer";
+import { DRIVE_LINKS, getImageAlt } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: 'Complete Design Archive',
+  title: "Complete Design Archive (6 Disciplines)",
   description:
-    'Browse the complete design archive of Zishan Khan featuring social media posts, YouTube thumbnails, logo designs, typography art, and more. Graphic designer based in Bhopal, India.',
+    "Comprehensive design archive of Zishan Khan featuring Social Media Creatives, YouTube Thumbnails, Logo Designs, Typography, Amazon A+ Images, and App Store Listings.",
   openGraph: {
-    title: 'Complete Design Archive',
+    title: "Complete Design Archive (6 Disciplines)",
     description:
-      'Browse the complete design archive of Zishan Khan featuring social media posts, YouTube thumbnails, logo designs, typography art, and more. Graphic designer based in Bhopal, India.',
-    type: 'website',
+      "Comprehensive design archive of Zishan Khan featuring Social Media Creatives, YouTube Thumbnails, Logo Designs, Typography, Amazon A+ Images, and App Store Listings.",
+    type: "website",
   },
 };
 
-function getImageAlt(filename: string, category: string): string {
-  const name = filename
-    .replace(/\.[^/.]+$/, '')
-    .replace(/[_-]/g, ' ')
-    .replace(/\b[a-f0-9]{20,}\b/gi, '')
-    .trim();
-  const cleanName = name || category;
-  return `${category} by Zishan Khan – ${cleanName}`;
+function readFolderImages(folderName: string, category: string): ArchiveItem[] {
+  const dirPath = path.join(process.cwd(), "public", folderName);
+  try {
+    if (!fs.existsSync(dirPath)) return [];
+    const files = fs.readdirSync(dirPath);
+    return files
+      .filter((file) => /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(file))
+      .map((file) => ({
+        src: `/${folderName}/${file}`,
+        alt: getImageAlt(file, category),
+      }));
+  } catch (error) {
+    console.error(`Error reading ${folderName}`, error);
+    return [];
+  }
 }
 
 export default function ArchivePage() {
-  const workDir = path.join(process.cwd(), 'public', 'work');
-  let images: string[] = [];
+  const socialMediaImages = readFolderImages("social-media", "Social media post");
+  const thumbnailImages = readFolderImages("thumbnails", "Thumbnail design");
+  const logoImages = readFolderImages("logos", "Logo mark");
+  const typographyImages = readFolderImages("typography", "Typography layout");
+  const amazonImages = readFolderImages("Amazon A+ images", "Amazon A+ EBC visual");
+  const appStoreImages = readFolderImages("App Store listing", "App store screenshot");
 
-  try {
-    const files = fs.readdirSync(workDir);
-    // Filter for image files
-    images = files.filter((file) => /\.(jpg|jpeg|png|webp|gif)$/i.test(file));
-  } catch (error) {
-    console.error('Failed to read work directory', error);
-  }
+  const collections: ArchiveCollection[] = [
+    {
+      id: "social-media",
+      title: "Social Media Posts",
+      subtitle: "High-engagement social media creatives, promotional carousels, and viral brand campaigns.",
+      driveUrl: DRIVE_LINKS.socialMedia,
+      categoryPageUrl: "/social-media",
+      isSquare: false,
+      images: socialMediaImages,
+    },
+    {
+      id: "thumbnails",
+      title: "Thumbnails",
+      subtitle: "High-converting, eye-catching YouTube and digital media thumbnails engineered for maximum CTR.",
+      driveUrl: DRIVE_LINKS.thumbnails,
+      categoryPageUrl: "/thumbnails",
+      isSquare: false,
+      images: thumbnailImages,
+    },
+    {
+      id: "logos",
+      title: "Logos & Brand Marks",
+      subtitle: "Distinctive, memorable brand identities and logo designs crafted with geometric balance.",
+      driveUrl: DRIVE_LINKS.logos,
+      categoryPageUrl: "/logos",
+      isSquare: true,
+      images: logoImages,
+    },
+    {
+      id: "typography",
+      title: "Typography & Lettering",
+      subtitle: "Expressive custom lettering, font pairings, and editorial hierarchy layouts.",
+      driveUrl: DRIVE_LINKS.typography,
+      categoryPageUrl: "/typography",
+      isSquare: false,
+      images: typographyImages,
+    },
+    {
+      id: "amazon-a-plus",
+      title: "Amazon A+ Images",
+      subtitle: "E-commerce product detail infographics, lifestyle visuals, and conversion-focused A+ content.",
+      driveUrl: DRIVE_LINKS.amazonAPlus,
+      categoryPageUrl: "/amazon-a-plus",
+      isSquare: false,
+      images: amazonImages,
+    },
+    {
+      id: "app-store",
+      title: "App Store Listing",
+      subtitle: "Sleek iOS and Android app screenshots, store mockups, and high-impact visual conversion assets.",
+      driveUrl: DRIVE_LINKS.appStore,
+      categoryPageUrl: "/app-store-listing",
+      isSquare: false,
+      images: appStoreImages,
+    },
+  ];
+
+  const totalCount = collections.reduce((acc, c) => acc + c.images.length, 0);
 
   return (
     <main id="main-content" className="min-h-screen bg-[#121212] py-20 px-4 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Home
-          </Link>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 mb-4">
+        {/* Header */}
+        <header className="mb-14">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors group text-sm font-medium"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Home
+            </Link>
+
+            <a
+              href={DRIVE_LINKS.rootPortfolio}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-gray-200 hover:text-white text-xs md:text-sm font-medium transition-all duration-300 active:scale-95 w-fit"
+            >
+              <span>Browse Full Drive Archive</span>
+              <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
+            </a>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs md:text-sm text-blue-400 font-semibold uppercase tracking-[0.25em] mb-3">
+            <Sparkles className="w-4 h-4" />
+            <span>Master Archive</span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-gray-400 mb-4 py-2 pr-4 leading-[1.15] md:leading-[1.15] inline-block">
             Archive.
           </h1>
-          <p className="text-gray-400 text-lg font-light">
-            A comprehensive collection of my graphic design, posters, and visual works.
+          <p className="text-gray-400 text-lg font-light max-w-3xl">
+            A comprehensive, organized collection across all 6 design disciplines ({totalCount} total projects). Click any project to open and explore the full high-resolution files on Google Drive.
           </p>
         </header>
 
-        <section
-          aria-label="Design archive gallery"
-          className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
-        >
-          {images.map((img, idx) => {
-            const altText = getImageAlt(img, 'Design work');
-            return (
-              <div
-                key={idx}
-                role="img"
-                aria-label={altText}
-                className="break-inside-avoid rounded-2xl overflow-hidden bg-white/[0.02] border border-white/[0.05] group cursor-pointer relative"
-              >
-                <div className="relative w-full">
-                  <Image
-                    src={`/work/${img}`}
-                    alt={altText}
-                    width={800}
-                    height={600}
-                    quality={80}
-                    loading="lazy"
-                    placeholder="empty"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]"
-                  />
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none backdrop-blur-sm">
-                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      <p className="text-white text-sm tracking-[0.2em] uppercase font-medium">View Project</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </section>
-
-        {images.length === 0 && (
-          <div className="text-center text-gray-500 py-20">
-            <p>No images found in the archive.</p>
-          </div>
-        )}
+        {/* Interactive Explorer with Tabs & 6 Divided Sections */}
+        <ArchiveExplorer collections={collections} totalCount={totalCount} />
       </div>
     </main>
   );

@@ -10,7 +10,7 @@
     <loc>https://zishankhan.vercel.app/archive</loc>
     <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://zishankhan.vercel.app/social-media</loc>
@@ -32,6 +32,18 @@
   </url>
   <url>
     <loc>https://zishankhan.vercel.app/typography</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://zishankhan.vercel.app/amazon-a-plus</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://zishankhan.vercel.app/app-store-listing</loc>
     <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
