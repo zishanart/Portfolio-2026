@@ -73,21 +73,21 @@ export function Projects() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
           <div>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
               Selected Works
             </h2>
-            <p className="mt-4 text-gray-400 text-lg max-w-xl font-light">
+            <p className="mt-4 text-gray-400 text-base sm:text-lg max-w-xl font-light">
               A collection of projects exploring the intersection of design, interaction, and engineering.
             </p>
           </div>
           <Link
             href="/archive"
-            className="group relative px-6 py-3 rounded-full bg-white text-black font-medium overflow-hidden transition-transform active:scale-95"
+            className="group relative px-6 py-3 rounded-full bg-white text-black font-medium overflow-hidden transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-2 shrink-0"
           >
             <span className="relative z-10 flex items-center gap-2">
               View All Archive <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-200 to-purple-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           </Link>
         </div>
 

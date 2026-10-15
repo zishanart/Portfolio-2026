@@ -40,13 +40,13 @@ export function Overlay({ scrollYProgress }: OverlayProps) {
         className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
         aria-hidden={section1Hidden ? "true" : undefined}
       >
-        <p className="text-sm md:text-base text-gray-400 uppercase tracking-[0.3em] mb-4 font-medium">
+        <p className="text-xs sm:text-sm md:text-base text-gray-400 uppercase tracking-[0.3em] mb-4 font-medium">
           Portfolio 2026
         </p>
-        <h1 className="text-6xl md:text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 mb-6 drop-shadow-2xl">
+        <h1 className="text-5xl sm:text-6xl md:text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 mb-6 drop-shadow-2xl">
           Zishan
         </h1>
-        <p className="text-xl md:text-3xl text-gray-300 font-light tracking-wide max-w-lg leading-relaxed">
+        <p className="text-lg sm:text-xl md:text-3xl text-gray-300 font-light tracking-wide max-w-lg leading-relaxed">
           Graphic Designer <br/> & Social Media Manager
         </p>
       </motion.div>
@@ -54,17 +54,17 @@ export function Overlay({ scrollYProgress }: OverlayProps) {
       {/* Section 2 */}
       <motion.div
         style={{ opacity: opacity2, y: y2 }}
-        className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-24"
+        className="absolute inset-0 flex flex-col items-start justify-center px-6 sm:px-12 md:px-24"
         aria-hidden={section2Hidden ? "true" : undefined}
       >
         <div className="max-w-2xl">
-          <p className="text-sm md:text-base text-blue-400 uppercase tracking-[0.3em] mb-6 font-semibold">
+          <p className="text-xs sm:text-sm md:text-base text-blue-400 uppercase tracking-[0.3em] mb-4 sm:mb-6 font-semibold">
             The Philosophy
           </p>
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white leading-[1.1] mb-6 drop-shadow-xl">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter text-white leading-[1.1] mb-4 sm:mb-6 drop-shadow-xl">
             I build <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">digital</span><br/>experiences.
           </h2>
-          <p className="text-lg md:text-2xl text-gray-400 font-light leading-relaxed">
+          <p className="text-base sm:text-lg md:text-2xl text-gray-400 font-light leading-relaxed">
             Focused on performance, aesthetics, and memorable micro-interactions.
           </p>
         </div>
@@ -73,24 +73,24 @@ export function Overlay({ scrollYProgress }: OverlayProps) {
       {/* Section 3 */}
       <motion.div
         style={{ opacity: opacity3, y: y3 }}
-        className="absolute inset-0 flex flex-col items-end justify-center text-right px-8 md:px-24"
+        className="absolute inset-0 flex flex-col items-end justify-center text-right px-6 sm:px-12 md:px-24"
         aria-hidden={section3Hidden ? "true" : undefined}
       >
         <div className="max-w-2xl">
-          <p className="text-sm md:text-base text-purple-400 uppercase tracking-[0.3em] mb-6 font-semibold">
+          <p className="text-xs sm:text-sm md:text-base text-purple-400 uppercase tracking-[0.3em] mb-4 sm:mb-6 font-semibold">
             The Approach
           </p>
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white leading-[1.1] mb-6 drop-shadow-xl">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter text-white leading-[1.1] mb-4 sm:mb-6 drop-shadow-xl">
             Bridging <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">design</span> <br className="hidden md:block" /> and engineering.
           </h2>
-          <p className="text-lg md:text-2xl text-gray-400 font-light leading-relaxed mb-8">
+          <p className="text-base sm:text-lg md:text-2xl text-gray-400 font-light leading-relaxed mb-6 sm:mb-8">
             Transforming ambitious concepts into poster, carousel design.
           </p>
           <Link
             href="/archive"
-            className="pointer-events-auto group relative px-6 py-3 rounded-full bg-white text-black font-medium overflow-hidden transition-transform active:scale-95 inline-flex items-center gap-2"
+            className="pointer-events-auto group relative px-6 py-3 rounded-full bg-white text-black font-medium overflow-hidden transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-2"
           >
-            <span className="relative z-10 flex items-center gap-2">
+            <span className="relative z-10 flex items-center gap-2 font-medium">
               View all archive
               <svg
                 width="16"
@@ -108,7 +108,7 @@ export function Overlay({ scrollYProgress }: OverlayProps) {
               </svg>
             </span>
             <div
-              className="absolute inset-0 bg-gradient-to-r from-purple-200 to-pink-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              className="absolute inset-0 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               aria-hidden="true"
             />
           </Link>

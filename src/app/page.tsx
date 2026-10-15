@@ -5,7 +5,7 @@ import { Contact } from "@/components/Contact";
 
 export default function Home() {
   return (
-    <main className="bg-[#121212] min-h-screen">
+    <main id="main-content" className="bg-[#121212] min-h-screen">
       <HeroSection />
       <Projects />
       <Contact />

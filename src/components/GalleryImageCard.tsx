@@ -98,12 +98,12 @@ export function GalleryImageCard({
 
       {/* Hover Overlay with Signature Site Button (Matching Selected Works) */}
       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm pointer-events-none z-10">
-        <div className="relative px-6 py-3 rounded-full bg-white text-black font-semibold text-xs md:text-sm tracking-normal shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] translate-y-3 group-hover:translate-y-0 group-hover:scale-105 active:scale-95 flex items-center gap-2">
+        <div className="group/btn pointer-events-auto relative px-6 py-3 rounded-full bg-white text-black font-semibold text-xs md:text-sm tracking-normal shadow-2xl overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] translate-y-3 group-hover:translate-y-0 hover:scale-105 active:scale-95 flex items-center gap-2">
           <span className="relative z-10 flex items-center gap-2 font-medium">
             <span>View Project</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+            <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
           </span>
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 pointer-events-none" />
         </div>
       </div>
     </a>

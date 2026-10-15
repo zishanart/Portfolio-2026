@@ -19,8 +19,7 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const rafRef = useRef<number>(0);
   const resizeTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  const [images, setImages] = useState<(HTMLImageElement | ImageBitmap)[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setImages] = useState<(HTMLImageElement | ImageBitmap)[]>([]);
   const imagesRef = useRef<(HTMLImageElement | ImageBitmap)[]>([]);
 
   // Acquire 2D context once on mount & set initial canvas size
@@ -32,58 +31,6 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
     contextRef.current = canvas.getContext("2d", { alpha: false });
   }, []);
 
-  // Preload images using createImageBitmap (off-main-thread) with fallback
-  useEffect(() => {
-    let cancelled = false;
-    const loadedImages: (HTMLImageElement | ImageBitmap)[] = new Array(FRAME_COUNT);
-    let loadedCount = 0;
-
-    const onFrameLoaded = (index: number, img: HTMLImageElement | ImageBitmap) => {
-      if (cancelled) return;
-      loadedImages[index] = img;
-      loadedCount++;
-      if (loadedCount === FRAME_COUNT) {
-        imagesRef.current = loadedImages;
-        setImages(loadedImages);
-        setIsLoading(false);
-        renderFrame(0, loadedImages);
-      }
-    };
-
-    for (let i = 0; i < FRAME_COUNT; i++) {
-      const src = getFramePath(i);
-
-      if (typeof createImageBitmap !== "undefined") {
-        // Off-main-thread decoding via createImageBitmap
-        fetch(src)
-          .then((res) => res.blob())
-          .then((blob) => createImageBitmap(blob))
-          .then((bitmap) => onFrameLoaded(i, bitmap))
-          .catch(() => {
-            // Fallback to Image() if createImageBitmap fails
-            const img = new Image();
-            img.src = src;
-            img.onload = () => onFrameLoaded(i, img);
-          });
-      } else {
-        // Fallback for browsers without createImageBitmap
-        const img = new Image();
-        img.src = src;
-        img.onload = () => onFrameLoaded(i, img);
-      }
-    }
-
-    return () => {
-      cancelled = true;
-      // Close ImageBitmaps to free GPU memory
-      loadedImages.forEach((img) => {
-        if (img && "close" in img) {
-          (img as ImageBitmap).close();
-        }
-      });
-    };
-  }, []);
-
   const renderFrame = useCallback(
     (index: number, imgArray?: (HTMLImageElement | ImageBitmap)[]) => {
       const ctx = contextRef.current;
@@ -91,14 +38,22 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
       const frames = imgArray || imagesRef.current;
       if (!ctx || !canvas || frames.length === 0) return;
 
-      const img = frames[Math.floor(index)];
+      const targetIdx = Math.max(0, Math.min(Math.floor(index), FRAME_COUNT - 1));
+      // Find the closest loaded frame if target frame hasn't arrived yet
+      let img = frames[targetIdx];
+      if (!img) {
+        for (let i = targetIdx; i >= 0; i--) {
+          if (frames[i]) {
+            img = frames[i];
+            break;
+          }
+        }
+      }
       if (!img) return;
 
-      // Read current canvas dimensions (set only on mount/resize, not here)
       const cw = canvas.width;
       const ch = canvas.height;
 
-      // Object-fit: cover logic
       const canvasRatio = cw / ch;
       const imgRatio = img.width / img.height;
 
@@ -121,6 +76,94 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
     []
   );
 
+  // Progressive frame loading: Priority on Frame 0, then non-blocking idle batching for 1-74
+  useEffect(() => {
+    let cancelled = false;
+    const loadedImages: (HTMLImageElement | ImageBitmap)[] = new Array(FRAME_COUNT);
+
+    const onFrameLoaded = (index: number, img: HTMLImageElement | ImageBitmap) => {
+      if (cancelled) return;
+      loadedImages[index] = img;
+      imagesRef.current = loadedImages;
+    };
+
+    const loadSingleFrame = (index: number): Promise<void> => {
+      const src = getFramePath(index);
+      if (typeof createImageBitmap !== "undefined") {
+        return fetch(src)
+          .then((res) => res.blob())
+          .then((blob) => createImageBitmap(blob))
+          .then((bitmap) => {
+            onFrameLoaded(index, bitmap);
+          })
+          .catch(() => {
+            return new Promise<void>((resolve) => {
+              const img = new Image();
+              img.src = src;
+              img.onload = () => {
+                onFrameLoaded(index, img);
+                resolve();
+              };
+              img.onerror = () => resolve();
+            });
+          });
+      } else {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => {
+            onFrameLoaded(index, img);
+            resolve();
+          };
+          img.onerror = () => resolve();
+        });
+      }
+    };
+
+    // 1. Immediately load & render Frame 0 (instant first paint, 0 TBT impact)
+    loadSingleFrame(0).then(() => {
+      if (cancelled) return;
+      renderFrame(0, loadedImages);
+      setImages(loadedImages);
+
+      // 2. Schedule remaining frames (1 to 74) in small idle batches
+      const loadRemainingFrames = (startIndex: number) => {
+        if (cancelled || startIndex >= FRAME_COUNT) return;
+        const BATCH_SIZE = 4;
+        const endIndex = Math.min(startIndex + BATCH_SIZE, FRAME_COUNT);
+        const batchPromises: Promise<void>[] = [];
+
+        for (let i = startIndex; i < endIndex; i++) {
+          batchPromises.push(loadSingleFrame(i));
+        }
+
+        Promise.all(batchPromises).finally(() => {
+          if (cancelled) return;
+          if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+            window.requestIdleCallback(() => loadRemainingFrames(endIndex), { timeout: 250 });
+          } else {
+            setTimeout(() => loadRemainingFrames(endIndex), 25);
+          }
+        });
+      };
+
+      if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+        window.requestIdleCallback(() => loadRemainingFrames(1), { timeout: 250 });
+      } else {
+        setTimeout(() => loadRemainingFrames(1), 25);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      loadedImages.forEach((img) => {
+        if (img && "close" in img) {
+          (img as ImageBitmap).close();
+        }
+      });
+    };
+  }, [renderFrame]);
+
   // RAF-batched draw scheduling
   const scheduleDraw = useCallback(
     (index: number) => {
@@ -138,7 +181,7 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
     scheduleDraw(latest);
   });
 
-  // Debounced resize handler (300ms)
+  // Debounced resize handler (300ms) with passive listener
   useEffect(() => {
     const handleResize = () => {
       clearTimeout(resizeTimerRef.current);
@@ -151,7 +194,7 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
       }, 300);
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimerRef.current);
@@ -160,14 +203,7 @@ export function ScrollyCanvas({ scrollYProgress }: ScrollyCanvasProps) {
   }, [frameIndex, renderFrame]);
 
   return (
-    <div className="sticky top-0 h-screen w-full overflow-hidden">
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#121212] z-10">
-          <p className="animate-pulse-slow text-gray-400 text-lg font-medium tracking-wider">
-            Loading...
-          </p>
-        </div>
-      )}
+    <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#121212]">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full object-cover"
