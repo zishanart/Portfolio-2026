@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { GalleryImageCard } from "./GalleryImageCard";
+import { getAppStoreImageDimensions } from "@/lib/constants";
 
 export interface ArchiveItem {
   src: string;
@@ -234,19 +235,19 @@ export function ArchiveExplorer({ collections, totalCount }: ArchiveExplorerProp
             ) : col.isPortrait ? (
               <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
                 {col.images.map((item, idx) => {
-                  const isBanner = item.src.toLowerCase().includes("banner");
+                  const dim = getAppStoreImageDimensions(item.src);
                   return (
                     <GalleryImageCard
                       key={idx}
                       src={item.src}
                       alt={item.alt}
                       driveUrl={col.driveUrl}
-                      aspectRatio={isBanner ? "auto" : "portrait"}
+                      aspectRatio="auto"
                       unoptimized={true}
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       quality={80}
-                      width={isBanner ? 1200 : 1080}
-                      height={isBanner ? 600 : 2340}
+                      width={dim.width}
+                      height={dim.height}
                     />
                   );
                 })}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { GalleryImageCard } from "@/components/GalleryImageCard";
-import { DRIVE_LINKS, getImageAlt } from "@/lib/constants";
+import { DRIVE_LINKS, getImageAlt, getAppStoreImageDimensions } from "@/lib/constants";
 import { GALLERY_FILES } from "@/lib/gallery-data";
 
 export const metadata: Metadata = {
@@ -57,19 +57,19 @@ export default function AppStoreListingPage() {
         >
           {images.map((img, idx) => {
             const altText = getImageAlt(img, "App store screenshot mockup");
-            const isBanner = img.toLowerCase().includes("banner");
+            const dim = getAppStoreImageDimensions(img);
             return (
               <GalleryImageCard
                 key={idx}
                 src={`/App Store listing/${img}`}
                 alt={altText}
                 driveUrl={DRIVE_LINKS.appStore}
-                aspectRatio={isBanner ? "auto" : "portrait"}
+                aspectRatio="auto"
                 unoptimized={true}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 quality={80}
-                width={isBanner ? 1200 : 1080}
-                height={isBanner ? 600 : 2340}
+                width={dim.width}
+                height={dim.height}
               />
             );
           })}

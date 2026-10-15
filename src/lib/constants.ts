@@ -25,3 +25,14 @@ export function getImageAlt(filename: string, category: string): string {
   const cleanName = name || category;
   return `${category} by Zishan Khan – ${cleanName}`;
 }
+
+export function getAppStoreImageDimensions(filename: string): { width: number; height: number } {
+  const lower = filename.toLowerCase();
+  if (lower.includes("mail-banner")) {
+    return { width: 800, height: 2400 };
+  }
+  if (lower.includes("banner")) {
+    return { width: 1200, height: 586 };
+  }
+  return { width: 1080, height: 2346 };
+}

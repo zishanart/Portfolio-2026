@@ -50,10 +50,10 @@ export function GalleryImageCard({
       aria-label={`${alt} - Open in Google Drive`}
       className={`group relative block overflow-hidden rounded-3xl bg-[#141414] border border-white/[0.06] hover:border-white/[0.15] transition-all duration-700 cursor-pointer ${
         isPortrait
-          ? "aspect-[9/16] p-2 sm:p-3 flex items-center justify-center bg-[#101010]"
+          ? "aspect-[9/16] overflow-hidden"
           : isSquare
           ? "aspect-square p-6 md:p-8 flex items-center justify-center"
-          : "break-inside-avoid min-h-[240px]"
+          : "break-inside-avoid"
       } ${className}`}
     >
       {/* Sleek Minimal Skeleton Loading Animation (No Text, No Spinner) */}
@@ -67,7 +67,7 @@ export function GalleryImageCard({
       {/* Image Container */}
       <div
         className={`relative w-full ${
-          isPortrait || isSquare ? "h-full flex items-center justify-center" : ""
+          isPortrait ? "h-full" : isSquare ? "h-full flex items-center justify-center" : ""
         }`}
       >
         <Image
@@ -85,7 +85,7 @@ export function GalleryImageCard({
           onError={() => setIsLoaded(true)}
           className={`transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${
             isPortrait
-              ? "w-full h-full object-contain group-hover:scale-[1.03]"
+              ? "w-full h-full object-cover group-hover:scale-[1.03]"
               : isSquare
               ? "max-w-full max-h-full object-contain group-hover:scale-105"
               : "w-full h-auto object-cover group-hover:scale-[1.03]"
