@@ -1,11 +1,9 @@
-import React from "react";
-import fs from "fs";
-import path from "path";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { GalleryImageCard } from "@/components/GalleryImageCard";
 import { DRIVE_LINKS, getImageAlt } from "@/lib/constants";
+import { GALLERY_FILES } from "@/lib/gallery-data";
 
 export const metadata: Metadata = {
   title: "App Store Listing Portfolio",
@@ -20,15 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function AppStoreListingPage() {
-  const workDir = path.join(process.cwd(), "public", "App Store listing");
-  let images: string[] = [];
-
-  try {
-    const files = fs.readdirSync(workDir);
-    images = files.filter((file) => /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(file));
-  } catch (error) {
-    console.error("Failed to read App Store listing directory", error);
-  }
+  const images = GALLERY_FILES.appStore;
 
   return (
     <main id="main-content" className="min-h-screen bg-[#121212] py-16 sm:py-20 px-4 sm:px-8 md:px-12 lg:px-24">

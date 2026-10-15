@@ -1,11 +1,9 @@
-import React from "react";
-import fs from "fs";
-import path from "path";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, Sparkles } from "lucide-react";
-import { ArchiveExplorer, ArchiveCollection, ArchiveItem } from "@/components/ArchiveExplorer";
+import { ArchiveExplorer, ArchiveCollection } from "@/components/ArchiveExplorer";
 import { DRIVE_LINKS, getImageAlt } from "@/lib/constants";
+import { GALLERY_FILES } from "@/lib/gallery-data";
 
 export const metadata: Metadata = {
   title: "Complete Design Archive (6 Disciplines)",
@@ -19,30 +17,31 @@ export const metadata: Metadata = {
   },
 };
 
-function readFolderImages(folderName: string, category: string): ArchiveItem[] {
-  const dirPath = path.join(process.cwd(), "public", folderName);
-  try {
-    if (!fs.existsSync(dirPath)) return [];
-    const files = fs.readdirSync(dirPath);
-    return files
-      .filter((file) => /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(file))
-      .map((file) => ({
-        src: `/${folderName}/${file}`,
-        alt: getImageAlt(file, category),
-      }));
-  } catch (error) {
-    console.error(`Error reading ${folderName}`, error);
-    return [];
-  }
-}
-
 export default function ArchivePage() {
-  const socialMediaImages = readFolderImages("social-media", "Social media post");
-  const thumbnailImages = readFolderImages("thumbnails", "Thumbnail design");
-  const logoImages = readFolderImages("logos", "Logo mark");
-  const typographyImages = readFolderImages("typography", "Typography layout");
-  const amazonImages = readFolderImages("Amazon A+ images", "Amazon A+ EBC visual");
-  const appStoreImages = readFolderImages("App Store listing", "App store screenshot");
+  const socialMediaImages = GALLERY_FILES.socialMedia.map((file) => ({
+    src: `/social-media/${file}`,
+    alt: getImageAlt(file, "Social media post"),
+  }));
+  const thumbnailImages = GALLERY_FILES.thumbnails.map((file) => ({
+    src: `/thumbnails/${file}`,
+    alt: getImageAlt(file, "Thumbnail design"),
+  }));
+  const logoImages = GALLERY_FILES.logos.map((file) => ({
+    src: `/logos/${file}`,
+    alt: getImageAlt(file, "Logo mark"),
+  }));
+  const typographyImages = GALLERY_FILES.typography.map((file) => ({
+    src: `/typography/${file}`,
+    alt: getImageAlt(file, "Typography layout"),
+  }));
+  const amazonImages = GALLERY_FILES.amazonAPlus.map((file) => ({
+    src: `/Amazon A+ images/${file}`,
+    alt: getImageAlt(file, "Amazon A+ EBC visual"),
+  }));
+  const appStoreImages = GALLERY_FILES.appStore.map((file) => ({
+    src: `/App Store listing/${file}`,
+    alt: getImageAlt(file, "App store screenshot"),
+  }));
 
   const collections: ArchiveCollection[] = [
     {

@@ -1,11 +1,9 @@
-import React from "react";
-import fs from "fs";
-import path from "path";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { GalleryImageCard } from "@/components/GalleryImageCard";
 import { DRIVE_LINKS, getImageAlt } from "@/lib/constants";
+import { GALLERY_FILES } from "@/lib/gallery-data";
 
 export const metadata: Metadata = {
   title: "YouTube Thumbnail Design Portfolio",
@@ -20,15 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function ThumbnailsPage() {
-  const workDir = path.join(process.cwd(), "public", "thumbnails");
-  let images: string[] = [];
-
-  try {
-    const files = fs.readdirSync(workDir);
-    images = files.filter((file) => /\.(jpg|jpeg|png|webp|gif)$/i.test(file));
-  } catch (error) {
-    console.error("Failed to read work directory", error);
-  }
+  const images = GALLERY_FILES.thumbnails;
 
   return (
     <main id="main-content" className="min-h-screen bg-[#121212] py-16 sm:py-20 px-4 sm:px-8 md:px-12 lg:px-24">
