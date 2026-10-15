@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowLeft, ExternalLink, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import { ArchiveExplorer, ArchiveCollection, ArchiveItem } from "@/components/ArchiveExplorer";
 import { DRIVE_LINKS, getImageAlt } from "@/lib/constants";
 
@@ -108,23 +108,13 @@ export default function ArchivePage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-10 sm:mb-14">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+          <div className="mb-8">
             <Link
               href="/"
               className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group text-sm font-medium"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Home
             </Link>
-
-            <a
-              href={DRIVE_LINKS.rootPortfolio}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 hover:text-white text-xs md:text-sm font-medium transition-all duration-300 active:scale-95 w-fit"
-            >
-              <span>Browse Full Drive Archive</span>
-              <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
-            </a>
           </div>
 
           <div className="flex items-center gap-2 text-xs md:text-sm text-blue-400 font-semibold uppercase tracking-[0.25em] mb-3">
